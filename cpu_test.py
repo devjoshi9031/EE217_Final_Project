@@ -1,13 +1,41 @@
 import numpy as np
 import cv2
 import os
+import matplotlib.pyplot as plt
+import time
+# number of rows and columns taken to reconstruct the image.
+recon_rank=200
 
-image = cv2.imread("/home/dev/EE217_Final_Project/test1.jpeg",0)
-U, S, V = np.linalg.svd(image)
-print(U.shape, np.diag(S).shape, V.shape, image.shape)
+check_point1 = time.time()
+# Get the image from the current directory.
+image = plt.imread("/home/dev/EE217_Final_Project/test2.jpg")
+# Convert the coloured image into grayscale image
+image = np.mean(image,-1)
+# Perform Singular value decomposition of the image
+U, S, V = np.linalg.svd(image, full_matrices=False)
+
+# Reconstruct the image using "recon_rank" number of rows and columns from U, S, and V matrices.
+ret = U[:,:recon_rank] @ np.diag(S)[0:recon_rank, :recon_rank] @ V[:recon_rank,:]
+
+check_point2 = time.time()
+print("Time taken to calculate SVD and reconstruct image: "+str(check_point2-check_point1))
+
+# Calculate the difference between the reconstructed image and original image.
+diff_array = np.subtract(image, ret)
+
+# Plot both the figures side-by-side
+fig = plt.figure()
+ax1 = fig.add_subplot(1,2,1)
+img = ax1.imshow(ret)
+img.set_cmap('gray')
+ax1.title.set_text('SVD with reconstruction using:'+str(recon_rank))
+plt.axis('off')
+
+ax2 = fig.add_subplot(1,2,2)
+img = ax2.imshow(image)
+img.set_cmap('gray')
+ax2.title.set_text('Original Image')
+plt.axis('off')
+plt.show()
 
 
-ret = (np.dot(U,(np.dot(S,V))))
-cv2.imshow("Something",image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
