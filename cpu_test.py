@@ -46,5 +46,5 @@ for file in range(0,len(list_of_images)):
     ax2.title.set_text('Original Image')
     plt.axis('off')
     plt.show()
-
+    plt.savefig('comp_img.jpg')
 print("Time taken to calculate SVD and reconstruct image for "+str(len(list_of_images))+" number of files is: "+str(total_time))
