@@ -98,17 +98,18 @@ int  solver_eigen (double *C_hd, double *W,double *V,int size )
 
 //check the result
  
-    printf("after syevd: info_gpu = %d\n", info_gpu);
+    printf("\nafter syevd: info_gpu = %d\n", info_gpu);
     assert(0 == info_gpu);
 
-    printf("eigenvalue = (matlab base-1), ascending order\n");
+    printf("\neigenvalue = (matlab base-1), ascending order\n");
     for(int i = 0 ; i < m ; i++){
         printf("W[%d] = %E\n", i+1, W[i]);
     }
 
+    printf("\n");
     printf("V = (matlab base-1)\n");
     printMatrix(m, m, V, lda, "V");
-    printf("=====\n");
+    printf("\n=====\n");
 
 // step 4: check eigenvalues
 //  double lambda_sup = 0;

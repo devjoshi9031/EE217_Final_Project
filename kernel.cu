@@ -67,11 +67,11 @@ __global__ void mysgemm(int m, int n, int k, const float *A, const float *B, flo
 void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C){
     // Initialize thread block and kernel grid dimensions ---------------------
 
-    const unsigned int BLOCK_SIZE = TILE_SIZE;
+//    const unsigned int BLOCK_SIZE = TILE_SIZE;
 	
     /*************************************************************************/
     //INSERT CODE HERE
-    int max=0,max_mn=0;
+//    int max=0,max_mn=0;
 
     int gridx,gridy;
 //    max_mn=(m>n)? m:n;

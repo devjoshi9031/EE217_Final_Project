@@ -7,16 +7,17 @@
 #include "support.cu"
 #include "getEigen.cu"
 #include "matMul.cu"
-
+#include "transpose.cu"
 
 
 //Matrix Print ; not working as expected right now
-void printMatrixFloat(int m, int n, float*A, int lda, const char* name)
+void printMatrixFloat(int m, int n, const float*A, int lda, const char* name)
 {
     for(int row = 0 ; row < m ; row++){
+        printf("\n");
         for(int col = 0 ; col < n ; col++){
-            float Areg = A[row + col*lda];
-            printf("%s(%d,%d) = %f\n", name, row+1, col+1, Areg);
+            float Areg = A[row*lda + col];
+            printf("%s(%d,%d) = %f\t", name, row+1, col+1, Areg);
         }
     }
 }
@@ -62,12 +63,14 @@ int main(int argc, char*argv[])
     B_h = (float*) malloc( sizeof(float)*B_sz );
     
 
-    B_h[0] =1.0;
-    B_h[1] =2.0;
-    B_h[2] =2.0;
-    B_h[3] =3.0;
-    B_h[4] =3.0;
-    B_h[5] =4.0;
+//    B_h[0] =1.0;
+//    B_h[1] =2.0;
+//    B_h[2] =2.0;
+//    B_h[3] =3.0;
+//    B_h[4] =3.0;
+//    B_h[5] =4.0;
+
+    basicTransp(matArow,matAcol,A_h,B_h);
 
 // C_hd and D_hd are double version of C_h and D_h
 
@@ -78,8 +81,9 @@ int main(int argc, char*argv[])
     D_hd = (double*) malloc( sizeof(double)*D_sz );
 
 
-    printMatrixFloat(matArow, matAcol, A_h, matArow, "A");
-    printMatrixFloat(matBrow, matBcol, B_h, matBrow, "B");
+    printMatrixFloat(matArow, matAcol, A_h, matAcol, "A");
+    printf("\n");
+    printMatrixFloat(matBrow, matBcol, B_h, matBcol, "B");
 
 
     mm=matArow;
@@ -101,10 +105,10 @@ int main(int argc, char*argv[])
     for (int i=0;i<C_sz;i++){C_hd[i]=(double)C_h[i];}
     for (int i=0;i<D_sz;i++){D_hd[i]=(double)D_h[i];}
 
-    printf("resulting matrix A'A  in double format is \n");
+    printf("\nresulting matrix AA'  in double format is \n");
     printMatrix(matArow, matBcol, C_hd, matArow, "C");     
 
-    printf("resulting matrix AA'  in double format is \n");
+    printf("\nresulting matrix A'A  in double format is \n");
     printMatrix(matBrow, matAcol, D_hd, matBrow, "D");    
 
     
