@@ -34,7 +34,7 @@ void main(int argc, char* argv[]){
     /**
      * Change this directory to the directory that contaiins bmp converted image from jpg_to_bmp.py file"
      */
-    DIR *d = opendir("/home/dev/EE217_Final_Project/images_converted/");
+    DIR *d = opendir("./images_converted/");
     if(d == NULL){
         printf("error in opening the directory\n");
         return;
@@ -52,8 +52,8 @@ void main(int argc, char* argv[]){
          *      -> for file_dir: run pwd in the directory where all the images are stored by the file "jpg_to_bmp.py" file.
          *      -> for target_dir: run pwd in the directory where you want the images to be stored by this .c file.
          */
-        char file_dir[100] = "/home/dev/EE217_Final_Project/images_converted/";
-        char target_dir[100] = "/home/dev/EE217_Final_Project/images_from_c_files/";
+        char file_dir[100] = "./images_converted/";
+        char target_dir[100] = "./images_from_c_files/";
 
         // check if the current file read is file. 
         if(dir->d_type !=DT_DIR)
