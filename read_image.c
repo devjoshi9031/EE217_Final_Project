@@ -31,6 +31,9 @@ void main(int argc, char* argv[]){
     FILE *fp;
     int i;
     // Get the directory pointer.
+    /**
+     * Change this directory to the directory that contaiins bmp converted image from jpg_to_bmp.py file"
+     */
     DIR *d = opendir("/home/dev/EE217_Final_Project/images_converted/");
     if(d == NULL){
         printf("error in opening the directory\n");
