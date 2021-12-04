@@ -7,49 +7,65 @@
 
 //#define DEBUG
 struct BITMAP_header {
-    char name[2];
-    unsigned int size;
-    int garbage;
-    unsigned int image_offset;
+    char name[2]; // Array to store 'B' & 'M' 
+    unsigned int size;  // Size of the header file.
+    int garbage;        // Not necessary information
+    unsigned int image_offset;  // When will the exact pixel values start in bytes.
 };
 
 struct DIB_header{
-    unsigned int header_size;
-    unsigned int width;
-    unsigned int height;
-    unsigned short int colorplanes;
-    unsigned short int bitsperpixel;
-    unsigned int compression;
-    unsigned int image_size;
-    unsigned int temp[4];
+    unsigned int header_size; // Size of DIB_Header
+    unsigned int width;         // Width of the image
+    unsigned int height;        // Height of the image
+    unsigned short int colorplanes; // Which colorplanes
+    unsigned short int bitsperpixel;    // How many bits we have per pixel.
+    unsigned int compression;           // If the file has compression applied.
+    unsigned int image_size;            // What is the actual image size.
+    unsigned int temp[4];               // Not Necessary but required.
 };
 
 
 void main(int argc, char* argv[]){
+    
+    // pointer to hold the file pointer.
     FILE *fp;
-    // DIR *d = opendir("/home/dev/EE217_Final_Project/images_converted/");
-    // char *target_dir = "/home/dev/EE217_Final_project/images_from_c_files/";
-    // char *final_dest[100];
-    // if(d == NULL){
-    //     printf("error in opening the directory\n");
-    //     return;
-    // }
-    // int index=0;
-    // struct dirent *dir;
-    // while((dir = readdir(d)) != NULL){
-    //     if(dir->d_type !=DT_DIR)
-    //         printf("%s\n", dir->d_name);
-    //     else
-    //         printf("Else: %s\n", dir->d_name);
+    int i;
+    // Get the directory pointer.
+    DIR *d = opendir("/home/dev/EE217_Final_Project/images_converted/");
+    if(d == NULL){
+        printf("error in opening the directory\n");
+        return;
+    }
+    // Get the struct to read each file in the directory.
+    struct dirent *dir;
+
+    // Read from the directory one file at a time.
+    while((dir = readdir(d)) != NULL){
+        // This is to get the files from the directory were every image will be stored from the python file.
+        /**
+         * FILE_DIR: path from where we are reading the files.
+         * TARGET_DIR: path where we are storing the files.
+         * 1. Give proper path depending on your system. 
+         *      -> for file_dir: run pwd in the directory where all the images are stored by the file "jpg_to_bmp.py" file.
+         *      -> for target_dir: run pwd in the directory where you want the images to be stored by this .c file.
+         */
+        char file_dir[100] = "/home/dev/EE217_Final_Project/images_converted/";
+        char target_dir[100] = "/home/dev/EE217_Final_Project/images_from_c_files/";
+
+        // check if the current file read is file. 
+        if(dir->d_type !=DT_DIR)
+            printf("%s\n", dir->d_name);
+        else
+            continue;
     
     
     // struct to hold the first header from the file.
     struct BITMAP_header header;
     // struct to hold the second header coming out from the file.
     struct DIB_header dibheader;
-
     // file pointer to hold the file IO.
-    fp = fopen("/home/dev/EE217_Final_Project/images_converted/test4.bmp", "rb");
+    strcat(&file_dir[0], dir->d_name);
+    fp = fopen(file_dir, "rb");
     if(fp==NULL){
         printf("Error\n");
         exit(1);
@@ -68,7 +84,7 @@ void main(int argc, char* argv[]){
     // array to hold the actual image file.
     unsigned char image_part[dibheader.height][dibheader.width];
     
-    for(int i=dibheader.height-1; i>=0; i--){
+    for(i=dibheader.height-1; i>=0; i--){
         fread((&image_part[i]),sizeof(unsigned char),dibheader.width  , fp);
     }
 
@@ -83,8 +99,9 @@ void main(int argc, char* argv[]){
     #endif
     
     // WRITING THE IMAGE BACK TO A NEW FILE to check if we what we get is okay.
+    strcat(&target_dir[0], dir->d_name);
     FILE *fpw;
-    fpw = fopen("/home/dev/EE217_Final_Project/images_from_c_files/test1.bmp", "w");
+    fpw = fopen(target_dir, "w");
     if(fpw==NULL) return;
     
     // write the character 'B' & 'M' in the new file.
@@ -95,16 +112,17 @@ void main(int argc, char* argv[]){
     fwrite(&dibheader, sizeof(struct DIB_header), 1, fpw);
 
     // Write the actual image data to a new BMP file.
-    for( int i=dibheader.height-1; i>=0; i--)
+    for(i=dibheader.height-1; i>=0; i--)
         fwrite(&image_part[i], sizeof(unsigned char), dibheader.width, fpw);
 
     printf("File written successfully\n");
     fclose(fpw); 
-
+        fclose(fp);
+    }
     // close the file ptrs.
 
-//    closedir(d);
+   closedir(d);
        
-    fclose(fp);
+
     return;
 }
