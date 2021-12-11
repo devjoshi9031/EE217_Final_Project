@@ -47,3 +47,15 @@ void printMatrix(int m, int n, const double*A, int lda, const char* name)
     }
 }
 
+
+void printMatrixFloat(int m, int n, const float*A, int lda, const char* name)
+{
+    for(int row = 0 ; row < m ; row++){
+        printf("\n");
+        for(int col = 0 ; col < n ; col++){
+            float Areg = A[row*lda+ col];
+            printf("%s(%d,%d) = %f\t", name, row+1, col+1, Areg);
+        }
+    }
+}
+

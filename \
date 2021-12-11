@@ -25,7 +25,7 @@
 //}
 
 
-//#define DEBUG
+
 int main(int argc, char*argv[])
 {
 
@@ -35,95 +35,70 @@ int main(int argc, char*argv[])
    int row=4;
    int  col=3;
    int M_sz=row*col;
-   float image_part1[M_sz];
+    unsigned char *image_part=NULL;
 
-   int rocol[2];
+    int rocol[2];
 
-//   readarray(image_part1,rocol);
+   readarray(image_part,rocol);
 
-//   printf("\nrow and column \t");
+   printf("\nrow and column \t");
 
-//   for (int i=0; i<2;i++){printf("%d\t",rocol[i]);}  
+   for (int i=0; i<2;i++){printf("%d\t",rocol[i]);}  
 
-//   size_t n = sizeof(image_part1)/sizeof(image_part1[0]);
-//   printf("\n Number of elements: %d",n); 
-
-//  printf("\n image part\n");
+   size_t n = sizeof(image_part)/sizeof(image_part[0]);
+   printf("\n Number of elements: %d",n); 
  
-//   for(int i=0; i<rocol[0]-1; i++){
-//        for(int j=0; j<rocol[1]; j++){
-//         printf("%f ", image_part1[i*rocol[1]+j]);
-//        }
-//        printf("\n");
-//    }
 
-
-   int lower=0;int upper=255;
+   for(int i=0; i<rocol[0]-1; i++){
+        for(int j=0; j<rocol[1]; j++){
+            printf("%d ", image_part[i*rocol[1]+j]);
+        }
+        printf("\n");
+    }
 
    M = (float*) malloc( sizeof(float)*M_sz );
 
-//  for (unsigned int i=0; i < M_sz; i++) { M[i] = (rand()%(upper-lower+1)/1.0)+lower; }
+   for (unsigned int i=0; i < M_sz; i++) { M[i] = (rand()%100)/10; }
 
 
-   M[0] =1.0;
-   M[1] =2.0;
-   M[2] =3.0;
-   M[3] =2.0;
-   M[4] =3.0;
-   M[5] =4.0;
-   M[6] =3.0;
-   M[7] =4.0;
-   M[8] =5.0;
-   M[9] =4.0;
-   M[10] =5.0;
-   M[11] =6.0;
+//   M[0] =1.0;
+//   M[1] =2.0;
+//   M[2] =3.0;
+//   M[3] =2.0;
+//   M[4] =3.0;
+//   M[5] =4.0;
+//   M[6] =3.0;
+//   M[7] =4.0;
+//   M[8] =5.0;
+//   M[9] =4.0;
+//   M[10] =5.0;
+//   M[11] =6.0;
  
    int m=row;
    int nn=col;
-   int r=3; 
-   double *Mc;
-   double *Sig;
-   double *U;
-   double *VT;
-
-   float rms=0.0; 
+   int r=2; 
+   double Mc[m*nn];
+   double Sig[m*nn];
+   double U[m*m];
+   double VT[nn*nn];
  
-   Mc=(double*)malloc(sizeof(double)*m*nn);
-   Sig=(double*)malloc(sizeof(double)*m*nn);
-   U=(double*)malloc(sizeof(double)*m*m);
-   VT=(double*)malloc(sizeof(double)*nn*nn);   
-
    startTime(&timer); 
    svdCalc(M,row,col,U,Sig,VT);   
   
    stopTime(&timer); printf("%f s\n", elapsedTime(timer)); 
-
    compressed(U,Sig,VT,Mc,m,nn,r);   
    
 //   stopTime(&timer); printf("%f s\n", elapsedTime(timer));
   
    
-   printf("Compressing........ \n");
-//   printMatrix(m,nn,Mc,nn,"Mc");
+   printf("\n");
+   printMatrix(m,nn,Mc,nn,"Mc");
 
    double diff[m*nn];
 
    for(int i=0;i<M_sz;i++){diff[i]=(double)M[i]-Mc[i];}
-
-
    printf("\n");
-//   printMatrix(m,nn,diff,nn,"diff");
-
-   float  eper;
-
-   rms=rmse(diff,m,nn);
-   eper=rms/upper*100;
-
-   printf("\n rms: %f , error percent: %f\n",rms,eper);
-
-
-   free(Mc);free(Sig);free(U);free(VT);
-
+   printMatrix(m,nn,diff,nn,"diff");
 
 ////   float *A_d, *B_d, *C_d,*D_d;
 //    size_t A_sz, B_sz, C_sz,D_sz;

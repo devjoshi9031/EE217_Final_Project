@@ -14,7 +14,8 @@ refrence: cuSolver official site by NVIDIA
 //#include "kernel.cu"
 //#include "support.cu"
 
-
+//:w
+//#define DEBUG
 int  solver_eigen (double *C_hd, double *W,double *V,int size )
 {
     cusolverDnHandle_t cusolverH = NULL;
@@ -106,10 +107,12 @@ int  solver_eigen (double *C_hd, double *W,double *V,int size )
         printf("W[%d] = %E\n", i+1, W[i]);
     }
 
+//    #ifdef DEBUG
     printf("\n");
     printf("V = (matlab base-1)\n");
     printMatrix(m, m, V, lda, "V");
     printf("\n=====\n");
+//    #endif 
 
 // step 4: check eigenvalues
 //  double lambda_sup = 0;
