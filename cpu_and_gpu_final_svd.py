@@ -26,7 +26,7 @@ total_gpu_time = 0
 ret = {}
 print("Image no: \t CPU_TIME \t GPU_TIME \t        Image_size\t CPU_Error\t CPU_Error_rate\t\t GPU_Error\t\t GPU_Error_rate")
 #for loop to iterate over the all the images in the directory.
-for file in range(0,10):
+for file in range(0,len(list_of_images)):
     #Read the image file in grayscale mode and put it in a numpy array.
     image = cv2.imread(os.path.join(path,list_of_images[file]),0)
     # can work without this but just to make sure.
@@ -72,12 +72,12 @@ for file in range(0,10):
     # print("gpu_error: "+str(gpu_error)+ "gpu_error_rate: "+str(gpu_error_rate))
     total_gpu_time +=(gpu_time2-gpu_time1)
     print(""+str(file)+"\t   " +str(cpu_time2-cpu_time1)+ "\t "+str(gpu_time2-gpu_time1)+ "\t" +str(image.shape[0])+ "x" +str(image.shape[1])+ "\t " +str(cpu_error)+ "\t" +str(cpu_error_rate)+ "\t " + str(gpu_error) + "\t "+ str(gpu_error_rate))
-    fig = plt.figure()
-    img = ax1.imshow(ret)
-    img.set_cmap('gray')
-    ax1.title.set_text('SVD with reconstruction using:'+str(recon_rank))
-    plt.axis('off')
-    plt.show()
+    # fig = plt.figure()
+    # img = ax1.imshow(ret)
+    # img.set_cmap('gray')
+    # ax1.title.set_text('SVD with reconstruction using:'+str(recon_rank))
+    # plt.axis('off')
+    # plt.show()
         
     #   Plot both the figures side-by-side
 
