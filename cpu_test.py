@@ -17,34 +17,33 @@ for file in range(0,len(list_of_images)):
     check_point1 = time.time()
     # Get the image from the current directory and read it in grayscale.
     image = cv2.imread(os.path.join(path, list_of_images[file]),0)
-    # Convert the coloured image into grayscale image
-    # image = np.mean(image,-1)
+    
     # Perform Singular value decomposition of the image
-    A, S, At = np.linalg.svd(image, full_matrices=False)
+    A, S, At = np.linalg.svd(image.astype(np.float32), full_matrices=False)
 
     # Reconstruct the image using "recon_rank" number of rows and columns from U, S, and V matrices.
     ret = A[:,:recon_rank] @ np.diag(S)[0:recon_rank, :recon_rank] @ At[:recon_rank,:]
 
     check_point2 = time.time()
     total_time +=(check_point2-check_point1)
-    print("Time taken to calculate SVD and reconstruct image for the file number " +str(file)+" is: "+str(check_point2-check_point1)+ 'secs')
+    print("Time taken to calculate SVD and reconstruct image for the file number " +str(file)+" is: "+str(check_point2-check_point1)+ ' secs')
 
     # Calculate the difference between the reconstructed image and original image.
     diff_array = np.subtract(image, ret)
 
     # Plot both the figures side-by-side
-    # fig = plt.figure()
-    # ax1 = fig.add_subplot(1,2,1)
-    # img = ax1.imshow(ret)
-    # img.set_cmap('gray')
-    # ax1.title.set_text('SVD with reconstruction using:'+str(recon_rank))
-    # plt.axis('off')
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1,2,1)
+    img = ax1.imshow(ret)
+    img.set_cmap('gray')
+    ax1.title.set_text('SVD with reconstruction using:'+str(recon_rank))
+    plt.axis('off')
 
-    # ax2 = fig.add_subplot(1,2,2)
-    # img = ax2.imshow(image)
-    # img.set_cmap('gray')
-    # ax2.title.set_text('Original Image')
-    # plt.axis('off')
-    # plt.show()
+    ax2 = fig.add_subplot(1,2,2)
+    img = ax2.imshow(image)
+    img.set_cmap('gray')
+    ax2.title.set_text('Original Image')
+    plt.axis('off')
+    plt.show()
 
 print("Time taken to calculate SVD and reconstruct image for "+str(len(list_of_images))+" number of files is: "+str(total_time))

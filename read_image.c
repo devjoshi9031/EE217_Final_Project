@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-//#define DEBUG
+#define DEBUG
 struct BITMAP_header {
     char name[2]; // Array to store 'B' & 'M' 
     unsigned int size;  // Size of the header file.
@@ -29,7 +29,7 @@ void main(int argc, char* argv[]){
     
     // pointer to hold the file pointer.
     FILE *fp;
-    int i;
+    int i, j=0;
     // Get the directory pointer.
     /**
      * Change this directory to the directory that contaiins bmp converted image from jpg_to_bmp.py file"
@@ -93,11 +93,14 @@ void main(int argc, char* argv[]){
 
     // To print the data we get from the image.
     #ifdef DEBUG
-    for(int i=0; i<dibheader.height-1; i++){
+    if(j==0){
+	    j++;
+	for(int i=0; i<dibheader.height-1; i++){
         for(int j=0; j<dibheader.width; j++){
-            printf("%d ", image_part[i][j]);
+            printf("%f  ", (float)image_part[i][j]);
         }
         printf("\n");
+    }
     }
     #endif
     

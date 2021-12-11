@@ -6,3 +6,6 @@
 *.fatbin
 *.bmp
 jpg/
+*.tgz
+*.sh
+final_output_images/
