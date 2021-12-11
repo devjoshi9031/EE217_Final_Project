@@ -7,7 +7,7 @@
 *.bmp
 jpg/
 *.tgz
-*.sh
+singularity_shell.sh
 final_output_images/
 *.png
 *.jpg
